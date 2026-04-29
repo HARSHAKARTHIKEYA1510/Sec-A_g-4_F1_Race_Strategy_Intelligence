@@ -18,14 +18,14 @@
 \usepackage{tabularx}
 \usepackage{xcolor}
 \usepackage{hyperref}
-\usepackage{titlesec}
+% \usepackage{titlesec}
 \usepackage{fancyhdr}
 \usepackage{setspace}
 \usepackage{parskip}
 \usepackage{caption}
 \usepackage{float}
 \usepackage{amsmath}
-\usepackage{multirow}
+% \usepackage{multirow}
 \usepackage{pdflscape}
 
 % ── Colour Definitions (F1 theme) ───────────────────────────────────────────
@@ -248,7 +248,7 @@ status.csv              & 140     & 2  & DNF/finish status codes \\
 \end{table}
 
 \subsection{Key Fields}
-\begin{itemize}[noitemsep]
+\begin{itemize}
     \item \texttt{grid}: Starting position (1 = pole; 0 = pit-lane start)
     \item \texttt{positionOrder}: Official finishing classification (1--N for all starters, including DNFs)
     \item \texttt{points}: Championship points scored
@@ -258,7 +258,7 @@ status.csv              & 140     & 2  & DNF/finish status codes \\
 \end{itemize}
 
 \subsection{Data Limitations \& Known Biases}
-\begin{itemize}[noitemsep]
+\begin{itemize}
     \item \textbf{Pit stop data sparse before 2010}: The Ergast database lacks pit stop timing for races before 2011. All pit stop analysis is scoped to the 2010--2024 window.
     \item \textbf{No tyre compound data}: The Ergast database does not include Pirelli tyre selections. We use \texttt{lap\_time\_std} (lap time standard deviation) as a proxy for tyre degradation.
     \item \textbf{Qualifying format changes}: The Q1/Q2/Q3 knockout format was introduced in 2006. Earlier qualifying data is structurally different and is excluded from qualifying gap analysis.
@@ -299,7 +299,7 @@ grid (NaN)              & Sparse & Filled with 0 (pit-lane starts) \\
 Pit stop durations exceeding 120 seconds were flagged as ``red flag'' or ``safety car'' pit stops and excluded from efficiency calculations. These outliers (typically fewer than 0.5\% of all pit stops) represent atypical race conditions rather than crew performance.
 
 \subsection{Data Type Conversions}
-\begin{itemize}[noitemsep]
+\begin{itemize}
     \item Qualifying times (format \texttt{1:26.572}) parsed to milliseconds via string splitting.
     \item Boolean flags (\texttt{is\_dnf}, \texttt{is\_podium}, \texttt{is\_win}, \texttt{is\_pole}) stored as 0/1 integers for Tableau SUM aggregation compatibility.
     \item Pit stop milliseconds rounded to one decimal place for readability.
@@ -331,7 +331,7 @@ The following derived columns were created during the cleaning phase:
 \end{table}
 
 \subsection{Assumptions}
-\begin{enumerate}[noitemsep]
+\begin{enumerate}
     \item All DNFs are classified by \texttt{statusId}: any status not in the ``Finished'' family is treated as a DNF.
     \item Pit-lane starts (grid = 0) are treated as starting from the back of the grid.
     \item The \texttt{positionOrder} field is used as the canonical finishing position for all analysis, including DNFs.
@@ -387,7 +387,7 @@ DNF Rate & $\frac{\text{COUNT(mechanical DNFs)}}{\text{COUNT(starts)}}$ & Engine
 \toprule
 \textbf{KPI} & \textbf{Formula} & \textbf{Decision Enabled} \\
 \midrule
-Grid-to-Finish Delta $\bigstar$ & $\text{grid} - \text{positionOrder}$ & Is our race strategy making us look better or worse than qualifying? \\[6pt]
+Grid-to-Finish Delta (*) & $\text{grid} - \text{positionOrder}$ & Is our race strategy making us look better or worse than qualifying? \\[6pt]
 Pit Stop Efficiency & $\text{AVG(pit\_duration\_ms)}$ per constructor per season & Pit crew training vs.\ marginal aero gains \\[6pt]
 Qualifying Gap to Pole & $\text{best\_q\_ms} - \text{pole\_q\_ms}$ & Car setup: optimise for 1-lap pace or race tyre management? \\
 \bottomrule
@@ -409,7 +409,7 @@ Compound Bias & $\frac{\text{lap\_time\_std}}{\text{mean\_lap\_time}}$ per circu
 \end{tabularx}
 \end{table}
 
-The \textbf{Grid-to-Finish Delta} ($\bigstar$) is the hero metric of this project. It isolates race-day strategic execution from pure car pace, enabling apples-to-apples comparison of teams' strategic capability.
+The \textbf{Grid-to-Finish Delta} ((*) ) is the hero metric of this project. It isolates race-day strategic execution from pure car pace, enabling apples-to-apples comparison of teams' strategic capability.
 
 \textbf{Reference:} \texttt{notebooks/03\_eda.ipynb} and \texttt{notebooks/04\_statistical\_analysis.ipynb}.
 
@@ -501,7 +501,7 @@ Six statistical analyses provide the evidence base for business recommendations.
 \textbf{Model Structure:} $\text{points} \sim \text{grid} + \text{stop\_count} + \text{avg\_pit\_ms} + \text{is\_dnf}$
 
 Detailed findings from the regression analysis via `statsmodels`:
-\begin{itemize}[noitemsep]
+\begin{itemize}
     \item \textbf{Overall Fit:} $R^2 = 0.60$ --- the model explains 60\% of the variance in points awarded, which is an extremely robust explanatory power for sports analytics where external factors like weather are omitted.
     \item \textbf{Grid Position:} The strongest predictor ($\beta \approx -0.621$, Standard Error = 0.012). Each grid position lost reduces the expected championship points by $\sim$0.6.
     \item \textbf{Pit Stop Duration:} Statistically significant ($p < 0.001$) with a negative coefficient ($\beta \approx -0.154$). Slower pit stops quantifiably reduce expected points.
@@ -542,7 +542,7 @@ At \textbf{Qualifying-Dominant} circuits: $r(\text{grid}, \text{finish}) = 0.85$
 At Strategy-Dominant circuits, the 2-stop strategy delivers an average finishing position \textbf{2 places better} than the 1-stop strategy. 68\% of top-10 finishes at these circuits employed a 2-stop strategy.
 
 \subsection{Summary of Key Statistical Findings}
-\begin{enumerate}[noitemsep]
+\begin{enumerate}
     \item Constructors who improve their average pit stop time by 0.5 seconds gain approximately 1 additional finishing position per race.
     \item Circuits where $r(\text{grid}, \text{finish}) > 0.7$ require near-perfect qualifying execution; pit strategy has minimal impact.
     \item Constructors who deploy 2-stop strategies at Strategy-Dominant circuits finish 2 positions higher on average.
@@ -574,7 +574,7 @@ The dashboard system supports a layered decision-making hierarchy: from season-l
 1 --- Constructor Intel  & Team Principal    & Are we improving vs.\ rivals?           & Points Efficiency Trend \\
 2 --- Pit Stop Analysis  & Strategy Director & Does pit speed win races?               & Pit Time vs.\ Position Scatter \\
 3 --- Race Craft         & Race Strategist   & Who races better than they qualify?      & Grid Delta Box Plot \\
-4 --- Circuit Intel $\bigstar$ & Race Engineer & What strategy per track? & World Map with Clusters \\
+4 --- Circuit Intel (*) & Race Engineer & What strategy per track? & World Map with Clusters \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -618,7 +618,7 @@ The dashboard system supports a layered decision-making hierarchy: from season-l
 
 \textbf{Filters:} Constructor, Year slider, Era dropdown.
 
-\subsection{Dashboard 4: Circuit Intelligence World Map $\bigstar$}
+\subsection{Dashboard 4: Circuit Intelligence World Map (*)}
 \textbf{Size:} 1400$\times$800 px $|$ \textbf{Background:} \texttt{\#0D1B2A}
 
 This is the project's signature dashboard. A dark-styled world map occupies the top 60\%, displaying all 78 F1 circuits as coloured dots: \textcolor{red}{\textbf{Red}} = Qualifying-Dominant, \textcolor{green}{\textbf{Green}} = Strategy-Dominant, \textcolor{orange}{\textbf{Orange}} = Mixed. Dot size encodes the Qualifying Lock-In Score (larger = harder to overtake). Below the map, two bar charts show Lock-In Scores ranked by circuit and Optimal Stop Count per circuit. A cluster filter lets the user isolate one archetype, causing all three views to update simultaneously.
@@ -696,7 +696,7 @@ R5 & Mid-field constructors show high variance in grid-to-finish delta (inconsis
 \end{table}
 
 \textbf{Feasibility Notes:}
-\begin{itemize}[noitemsep]
+\begin{itemize}
     \item R1 and R3 require only strategic decisions --- no capital expenditure.
     \item R2 requires investment in pit crew training rigs and pneumatic equipment (estimated \$200K--500K, well within the cost cap).
     \item R4 requires coordination with the power unit manufacturer for conservative engine mapping.
@@ -840,7 +840,7 @@ High DNF Flag      & \texttt{[DNF Rate] > 0.15} \\
 \subsection*{C. EDA Chart Index}
 All charts are saved as PNG files in \texttt{reports/figures/}:
 
-\begin{enumerate}[noitemsep]
+\begin{enumerate}
     \item \texttt{chart\_01\_points\_efficiency\_trend.png} --- Points efficiency trend
     \item \texttt{chart\_02\_dnf\_rate\_analysis.png} --- DNF rate analysis
     \item \texttt{chart\_03\_grid\_delta\_boxplot.png} --- Grid-to-finish delta box plots

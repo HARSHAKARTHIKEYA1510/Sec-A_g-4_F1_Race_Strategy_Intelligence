@@ -67,6 +67,25 @@ This repository contains the comprehensive data analysis and visualization for t
 
 <br/>
 
+## Interactive Tableau Dashboards
+
+<div align="center">
+
+| Dashboard | Description | Link |
+| :--- | :--- | :--- |
+| **Dashboard 1** | Constructor Intelligence | [**View Workbook**](https://public.tableau.com/app/profile/kushal.sarkar6859/viz/F1RaceStrategyIntelligenceNSTDVACapstoneG4/Dashboard1-ConstructorIntel?publish=yes) |
+| **Dashboard 2** | Pit Stop Analysis | [**View Workbook**](https://public.tableau.com/app/profile/kushal.sarkar6859/viz/F1RaceStrategyAnalysisNSTDVACapstoneG4/Dashboard2-PitStopAnalysis?publish=yes) |
+| **Dashboard 3** | Race Craft & Execution | [**View Workbook**](https://public.tableau.com/app/profile/kushal.sarkar6859/viz/F1RaceCraftAnalysisNSTDVACapstoneG4/Dashboard3-RaceCraft?publish=yes) |
+| **Dashboard 4** | Tactical Circuit Intelligence | [**View Workbook**](https://public.tableau.com/app/profile/kushal.sarkar6859/viz/F1RaceCircuitIntelligenceNSTDVACapstoneG4/Dashboard4-CircuitIntelligence?publish=yes) |
+
+</div>
+
+<br/>
+
+---
+
+<br/>
+
 ## Technical Problem Statement
 
 ### Sector: Motorsport & Predictive Analytics
