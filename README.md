@@ -16,7 +16,7 @@
 
 <br/>
 
-**National School of Technology** &nbsp;·&nbsp; DVA Capstone Project &nbsp;·&nbsp; Gate 1 &nbsp;·&nbsp; Section A, Group 4
+**Newton School of Technology** &nbsp;·&nbsp; DVA Capstone Project &nbsp;·&nbsp; Gate 1 &nbsp;·&nbsp; Section A, Group 4
 
 <br/>
 
