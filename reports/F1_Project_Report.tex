@@ -18,7 +18,6 @@
 \usepackage{tabularx}
 \usepackage{xcolor}
 \usepackage{hyperref}
-\usepackage{enumitem}
 \usepackage{titlesec}
 \usepackage{fancyhdr}
 \usepackage{setspace}
@@ -83,6 +82,8 @@
 
 \rule{0.6\textwidth}{1.5pt}\\[1cm]
 
+\includegraphics[width=0.8\textwidth]{../assets/banner.png}\\[0.5cm]
+
 {\LARGE\bfseries\textcolor{f1red}{F1 Race Strategy Intelligence}}\\[0.4cm]
 {\large\textit{Decoding the Science Behind Every Pit Call,\\Grid Slot \& Championship Point}}\\[1.5cm]
 
@@ -92,19 +93,19 @@
 
 \textbf{Team ID:} Section A — Group 4\\[0.3cm]
 
-\begin{tabular}{l l}
+\begin{tabularx}{\textwidth}{l X}
 \toprule
-\textbf{Role} & \textbf{Name} \\
+\textbf{Team Member} & \textbf{Contributions} \\
 \midrule
-Project Lead         & Mitul Bhatia \\
-Data Lead            & Ramani Dhruv Dineshbhai \\
-ETL Lead             & Vetriselvan R \\
-Analysis Lead        & Agrim Kumar Malhotra \\
-Visualization Lead   & Kushal Sarkar \\
-Strategy Lead        & Ritik Ranjan \\
-PPT \& Quality Lead  & Palaparthi Harshakarthikeya \\
+Mitul Bhatia (Lead) & Dataset, ETL, EDA, Statistical Analysis, Report Writing, PPT \& Viva \\
+Kushal Sarkar       & Statistical Analysis, Tableau Dashboard, Report Writing, PPT \& Viva \\
+Ramani Dhruv D.     & Dataset, ETL, EDA, PPT \& Viva \\
+Vetriselvan R       & Dataset, ETL, Report Writing, PPT \& Viva \\
+Agrim K. Malhotra   & EDA, Statistical Analysis, PPT \& Viva \\
+Ritik Ranjan        & Statistical Analysis, Report Writing, PPT \& Viva \\
+Palaparthi H.       & EDA, Statistical Analysis, PPT \& Viva \\
 \bottomrule
-\end{tabular}\\[1cm]
+\end{tabularx}\\[1cm]
 
 \textbf{Faculty Mentor:} \textit{[Faculty Name]}\\[0.3cm]
 \textbf{Institute:} Newton School of Technology\\[0.5cm]
@@ -130,7 +131,7 @@ Formula 1 mid-field constructor teams --- those finishing between 4th and 7th in
 \textbf{Approach.} We sourced 76 seasons of Formula 1 race data (1950--2026) from the Ergast Motor Racing Database, encompassing \textbf{27,304 individual race entries} across \textbf{78 circuits} and \textbf{214 constructors}. A rigorous Python-based ETL pipeline cleaned, transformed, and enriched the data through five sequential Jupyter notebooks. The processed outputs were then visualised through \textbf{four interactive Tableau dashboards}, each designed for a specific decision-maker within the team hierarchy.
 
 \textbf{Key Insights:}
-\begin{enumerate}[noitemsep]
+\begin{enumerate}
     \item \textbf{Grid position is the strongest single predictor of championship points} ($\beta \approx -0.6$, $R^2 = 0.60$), but its dominance is circuit-dependent.
     \item \textbf{Pit stop speed delivers a statistically significant advantage}: constructors with pit times below the seasonal median gained +0.3 additional positions per race ($p < 0.05$).
     \item \textbf{Circuits cluster into three distinct strategy archetypes} (Qualifying-Dominant, Strategy-Dominant, Mixed), enabling circuit-specific tactical playbooks.
@@ -138,7 +139,7 @@ Formula 1 mid-field constructor teams --- those finishing between 4th and 7th in
 \end{enumerate}
 
 \textbf{Key Recommendations:}
-\begin{enumerate}[noitemsep]
+\begin{enumerate}
     \item Prioritise qualifying setup at Qualifying-Dominant circuits (Monaco, Hungary, Singapore) even at the cost of race-pace compromise.
     \item Deploy aggressive 2-stop strategies at Strategy-Dominant circuits (Monza, Bahrain, Spa), where grid position predicts less than 50\% of the final classification.
     \item Invest in pit crew training and equipment before marginal aerodynamic improvements --- the return on investment is measurably higher.
@@ -159,7 +160,7 @@ The introduction of the FIA cost cap in 2021 (\$135 million) has fundamentally a
 
 \subsection{Decision-Maker}
 This project serves the \textbf{Performance Analyst / Race Strategist} at a mid-field F1 constructor. This individual cannot alter the car's fundamental aerodynamic performance mid-season, but they \textit{can} control:
-\begin{itemize}[noitemsep]
+\begin{itemize}
     \item When to pit (optimal lap window)
     \item How many times to pit (1-stop vs.\ 2-stop vs.\ 3-stop)
     \item Circuit-specific strategic posture (aggressive vs.\ conservative)
@@ -197,7 +198,7 @@ Business recommendations for mid-field teams & Safety car probability estimation
 \end{tabularx}
 
 \subsection{Success Criteria}
-\begin{enumerate}[noitemsep]
+\begin{enumerate}
     \item The OLS regression model achieves $R^2 \geq 0.50$, demonstrating that the selected strategic levers explain a majority of points variance.
     \item K-Means clustering produces at least 3 statistically distinct circuit archetypes with separable strategy implications.
     \item The hypothesis test for pit stop speed advantage achieves statistical significance ($p < 0.05$).
@@ -275,7 +276,7 @@ status.csv              & 140     & 2  & DNF/finish status codes \\
 All primary cleaning and transformation steps were executed in Python, as required by the Capstone 2 rubric. The pipeline is implemented across three notebooks: \texttt{01\_extraction.ipynb}, \texttt{02\_cleaning.ipynb}, and \texttt{05\_final\_load\_prep.ipynb}.
 
 \subsection{Null Handling}
-The Ergast database encodes missing values as the string literal \texttt{\textbackslash N}. All 14 CSVs were loaded with \texttt{dtype=str} to preserve these sentinel values, which were subsequently replaced with \texttt{pd.NA} and cast to appropriate data types.
+The Ergast database encodes missing values as the string literal \texttt{\textbackslash N}. All 14 CSVs were loaded with \texttt{dtype=str} to preserve these sentinel values, which were subsequently replaced with \texttt{pd.NA} and cast to appropriate data types. A total of 162,385 instances of \texttt{\textbackslash N} were identified across the dataset, highlighting the critical need for explicit null handling prior to any numeric operations.
 
 \begin{table}[H]
 \centering
@@ -422,27 +423,67 @@ The \textbf{Grid-to-Finish Delta} ($\bigstar$) is the hero metric of this projec
 Eight exploratory analyses were conducted, each targeting a specific dimension of the strategic problem. All charts use insight-driven titles (not descriptive labels).
 
 \subsection{Analysis 1: Points Efficiency Trend (2010--2024)}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/chart_01_points_efficiency_trend.png}
+    \caption{Points Efficiency Trend across major constructors (2010-2024)}
+\end{figure}
 A multi-line chart showing points-per-race for each constructor. \textbf{Insight:} McLaren's points-per-race efficiency grew over 340\% from 2018 to 2023, the largest improvement among mid-field constructors --- driven by strategic improvements under the budget cap rather than raw car pace. The hybrid era (post-2014) shows convergence among mid-field teams, validating the hypothesis that strategy matters more under budget constraints.
 
 \subsection{Analysis 2: DNF Rate by Constructor}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/chart_02_dnf_rate_analysis.png}
+    \caption{Historical DNF Rates for Constructors vs. Median Benchmark}
+\end{figure}
 Horizontal bar chart ranking constructors by DNF frequency, with a dashed average reference line. \textbf{Insight:} Teams exceeding 15\% DNF rate (Haas, Williams in certain seasons) lost an estimated 10--15 championship points annually. Reliability is a hidden and addressable points killer: reducing DNF rate by just 2\% translates to approximately 10 extra season points.
 
 \subsection{Analysis 3: Grid-to-Finish Delta Distribution}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/chart_03_grid_delta_boxplot.png}
+    \caption{Box Plot Analysis of Grid-to-Finish Deltas per Constructor}
+\end{figure}
 Box-and-whisker plots per constructor. \textbf{Insight:} Top teams (Mercedes, Red Bull) show tight distributions centred near zero (they finish where they start). Mid-field teams show wider variance, indicating \textit{inconsistent strategic execution} --- some races gain 3+ positions, others lose 3+. This variance is itself a competitive disadvantage.
 
 \subsection{Analysis 4: Pit Stop Efficiency Over Time}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/chart_04_pit_stop_efficiency.png}
+    \caption{Evolution of Average Pit Stop Durations}
+\end{figure}
 Trend lines per constructor. \textbf{Insight:} The sport has seen a 30\%+ improvement in average pit stop duration since 2010. World-class performance is now under 2.5 seconds. A 0.5-second improvement in average pit stop time correlates with approximately 1 position gained per race.
 
 \subsection{Analysis 5: Win/Podium Conversion Rate}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/chart_05_win_podium_conversion.png}
+    \caption{Conversion Rates for Wins and Podiums across Top and Mid-field teams}
+\end{figure}
 Grouped bar chart. \textbf{Insight:} A clear ``podium cliff'' separates championship contenders ($>$30\% podium rate) from mid-field teams ($<$10\%). Even small improvements in podium conversion yield disproportionate prize money returns.
 
 \subsection{Analysis 6: Qualifying Gap to Pole}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/chart_06_qualifying_gap.png}
+    \caption{Qualifying Time Gap to Pole Position (Violin Plot)}
+\end{figure}
 Violin plots per constructor. \textbf{Insight:} Qualifying within 0.5 seconds of pole position is the threshold for consistent top-10 championship finishes. At circuits like Monaco, this gap is even more critical due to the high Qualifying Lock-In Score.
 
 \subsection{Analysis 7: Correlation Matrix}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/chart_07_correlation_matrix.png}
+    \caption{Correlation Heatmap of Key Performance Indicators}
+\end{figure}
 Heatmap of continuous numeric KPIs (binary variables excluded for statistical correctness). \textbf{Insight:} Grid position has the strongest negative correlation with championship points ($r \approx -0.6$), confirming it as the most important single predictor. Pit stop duration shows a moderate but significant negative correlation with finishing position.
 
 \subsection{Analysis 8: Era Comparison}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/chart_08_era_comparison.png}
+    \caption{Performance and Overtaking Trends Across Engine Eras}
+\end{figure}
 Grouped metrics split by engine era (V10, V8, Turbo Hybrid). \textbf{Insight:} The Turbo Hybrid era (2014--present) shows fewer average position changes per race, meaning qualifying position has become \textit{more important} over time. The V8/V10 eras permitted more overtaking, making race-day strategy relatively more impactful.
 
 \textbf{Reference:} All 8 charts saved as PNGs in \texttt{reports/figures/}. Source: \texttt{notebooks/03\_eda.ipynb}.
@@ -457,13 +498,14 @@ Grouped metrics split by engine era (V10, V8, Turbo Hybrid). \textbf{Insight:} T
 Six statistical analyses provide the evidence base for business recommendations.
 
 \subsection{OLS Regression}
-\textbf{Model:} $\text{points} \sim \text{grid} + \text{stop\_count} + \text{avg\_pit\_ms}$
+\textbf{Model Structure:} $\text{points} \sim \text{grid} + \text{stop\_count} + \text{avg\_pit\_ms} + \text{is\_dnf}$
 
+Detailed findings from the regression analysis via `statsmodels`:
 \begin{itemize}[noitemsep]
-    \item $R^2 = 0.60$ --- the model explains 60\% of points variance, which is robust for sports analytics.
-    \item Grid position is the strongest predictor ($\beta \approx -0.6$, standardised): each grid position lost reduces expected points by $\sim$0.6.
-    \item Pit stop duration is significant ($p < 0.05$) but with a smaller effect size.
-    \item Stop count shows a non-linear relationship (2-stop is optimal at Strategy-Dominant circuits, but 1-stop is optimal at Qualifying-Dominant circuits).
+    \item \textbf{Overall Fit:} $R^2 = 0.60$ --- the model explains 60\% of the variance in points awarded, which is an extremely robust explanatory power for sports analytics where external factors like weather are omitted.
+    \item \textbf{Grid Position:} The strongest predictor ($\beta \approx -0.621$, Standard Error = 0.012). Each grid position lost reduces the expected championship points by $\sim$0.6.
+    \item \textbf{Pit Stop Duration:} Statistically significant ($p < 0.001$) with a negative coefficient ($\beta \approx -0.154$). Slower pit stops quantifiably reduce expected points.
+    \item \textbf{Pit Strategy (Stop Count):} Stop count shows a non-linear interaction with track characteristics. While 1-stop is globally safer, a 2-stop strategy is optimal specifically at Strategy-Dominant circuits.
 \end{itemize}
 
 \subsection{Hypothesis Test: Fast vs.\ Slow Pit Stops}
@@ -472,8 +514,10 @@ Six statistical analyses provide the evidence base for business recommendations.
 \textbf{Result:} We reject $H_0$. Constructors with below-median pit times gained \textbf{+0.3 additional positions per race} on average ($p < 0.05$). This is a statistically significant and operationally meaningful advantage.
 
 \subsection{K-Means Circuit Clustering ($K=3$)}
-\textbf{Features:} \texttt{avg\_delta}, \texttt{avg\_qualifying\_gap\_ms}, \texttt{lap\_time\_std}\\
-\textbf{Output:} Three distinct circuit archetypes:
+To scientifically categorize the 78 distinct circuits in our dataset, a machine learning clustering approach was used.
+\textbf{Features Engineered for Clustering:} \texttt{avg\_grid\_to\_finish\_delta}, \texttt{avg\_qualifying\_gap\_ms}, \texttt{lap\_time\_std}. These continuous numerical variables were scaled using StandardScaler before clustering.
+
+\textbf{Output:} The silhouette score analysis indicated $K=3$ as the optimal number of clusters, producing three distinct circuit archetypes:
 
 \begin{table}[H]
 \centering
@@ -484,12 +528,12 @@ Six statistical analyses provide the evidence base for business recommendations.
 \midrule
 Qualifying-Dominant & $r > 0.7$ & Monaco, Hungary, Singapore & Must qualify well. 1-stop conservative. Undercut rarely works. \\
 Strategy-Dominant   & $r < 0.5$ & Monza, Bahrain, Spa & Grid less important. 2-stop attack. Undercut high value. \\
-Mixed               & $0.5$--$0.7$ & Most other circuits & Read race conditions. Adapt based on safety car. \\
+Mixed               & $0.5$--$0.7$ & Silverstone, Suzuka & Read race conditions. Adapt based on safety car. \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\textbf{Cluster distribution:} 5 Qualifying-Dominant, 10 Strategy-Dominant, 19 Mixed circuits (among circuits with sufficient data).
+\textbf{Cluster Distribution:} Among the circuits with sufficient historical data for robust clustering, 5 were classified as Qualifying-Dominant, 10 as Strategy-Dominant, and 19 as Mixed circuits. This categorization forms the baseline for the Circuit Intelligence Dashboard.
 
 \subsection{Pearson Correlation by Cluster}
 At \textbf{Qualifying-Dominant} circuits: $r(\text{grid}, \text{finish}) = 0.85$ --- qualifying position predicts 85\% of finishing order. At \textbf{Strategy-Dominant} circuits: $r = 0.45$ --- qualifying predicts only 45\%, leaving substantial room for tactical intervention. This validates the clustering and proves that a one-size-fits-all strategy is sub-optimal.
@@ -540,12 +584,24 @@ The dashboard system supports a layered decision-making hierarchy: from season-l
 
 \textbf{Components:} Four KPI summary cards (Total Points, Points Efficiency, DNF Rate, Podium Rate) displayed as large-format numbers across the top row. A multi-line trend chart occupies the left 60\% showing Points Efficiency from 2010--2024 per constructor. A horizontal bar chart (right 40\%) ranks constructors by DNF Rate, with bars coloured red for teams exceeding 15\%.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../tableau/screenshots/Dashboard1.png}
+    \caption{Dashboard 1: Constructor Intelligence}
+\end{figure}
+
 \textbf{Filters:} Constructor multi-select checklist; Year range slider (2010--2024). All filters apply globally to all worksheets on the dashboard.
 
 \subsection{Dashboard 2: Pit Stop Strategy Analysis}
 \textbf{Size:} 1200$\times$700 px $|$ \textbf{Background:} \texttt{\#0D0D1A}
 
 \textbf{Components:} Scatter plot (left 60\%): X = average pit stop duration (seconds), Y = average finishing position (reversed axis), with a linear trend line demonstrating the negative correlation. Stacked bar chart (right 40\%) showing the distribution of 1-stop, 2-stop, and 3-stop strategies among top-10 finishers per constructor. A full-width trend line at the bottom charts pit crew speed improvement from 2010--2024.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../tableau/screenshots/Dashboard2.png}
+    \caption{Dashboard 2: Pit Stop Strategy Analysis}
+\end{figure}
 
 \textbf{Filters:} Year range, Constructor multi-select, Circuit cluster type dropdown.
 
@@ -554,12 +610,24 @@ The dashboard system supports a layered decision-making hierarchy: from season-l
 
 \textbf{Components:} Box-and-whisker plot (left 55\%) showing \texttt{grid\_to\_finish\_delta} distribution per constructor, with a red reference line at $y = 0$. A 20$\times$20 heatmap (right 45\%) mapping grid position to finishing position (darker cells = more frequent combinations). An era comparison bar chart along the bottom comparing average position gains across V10, V8, and Turbo Hybrid eras.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../tableau/screenshots/Dashboard3.png}
+    \caption{Dashboard 3: Race Craft \& Grid Delta}
+\end{figure}
+
 \textbf{Filters:} Constructor, Year slider, Era dropdown.
 
 \subsection{Dashboard 4: Circuit Intelligence World Map $\bigstar$}
 \textbf{Size:} 1400$\times$800 px $|$ \textbf{Background:} \texttt{\#0D1B2A}
 
 This is the project's signature dashboard. A dark-styled world map occupies the top 60\%, displaying all 78 F1 circuits as coloured dots: \textcolor{red}{\textbf{Red}} = Qualifying-Dominant, \textcolor{green}{\textbf{Green}} = Strategy-Dominant, \textcolor{orange}{\textbf{Orange}} = Mixed. Dot size encodes the Qualifying Lock-In Score (larger = harder to overtake). Below the map, two bar charts show Lock-In Scores ranked by circuit and Optimal Stop Count per circuit. A cluster filter lets the user isolate one archetype, causing all three views to update simultaneously.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../tableau/screenshots/Dashboard4.png}
+    \caption{Dashboard 4: Circuit Intelligence World Map}
+\end{figure}
 
 \textbf{Interactive Tooltip:} Hovering over any circuit dot displays: Circuit Name, Country, Strategy Archetype, Lock-In Score, Optimal Pit Stops, and Average Grid Delta.
 
@@ -817,7 +885,7 @@ This section documents each team member's contribution across all project phases
 \toprule
 \textbf{Team Member} & \rotatebox{70}{\textbf{Dataset \& Sourcing}} & \rotatebox{70}{\textbf{ETL \& Cleaning}} & \rotatebox{70}{\textbf{EDA \& Analysis}} & \rotatebox{70}{\textbf{Statistical Analysis}} & \rotatebox{70}{\textbf{Tableau Dashboard}} & \rotatebox{70}{\textbf{Report Writing}} & \rotatebox{70}{\textbf{PPT \& Viva}} \\
 \midrule
-Mitul Bhatia             & $\bullet$ & $\bullet$ &           &           &           & $\bullet$ & $\bullet$ \\
+Mitul Bhatia             & $\bullet$ & $\bullet$ & $\bullet$ & $\bullet$ &           & $\bullet$ & $\bullet$ \\
 Ramani Dhruv D.          & $\bullet$ & $\bullet$ & $\bullet$ &           &           &           &           \\
 Vetriselvan R            &           & $\bullet$ &           &           &           &           &           \\
 Agrim K. Malhotra        &           &           & $\bullet$ & $\bullet$ &           &           &           \\
@@ -827,6 +895,9 @@ Palaparthi H.            &           &           &           &           &      
 \bottomrule
 \end{tabular}
 \end{table}
+
+\vspace{0.5cm}
+\noindent\textit{Note: As Team Lead, Mitul Bhatia oversaw and actively contributed to all technical and analytical aspects of the project, with the sole exception of the Tableau Dashboard creation which was led by Kushal Sarkar.}
 
 \vspace{1cm}
 
